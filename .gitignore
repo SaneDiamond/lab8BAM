@@ -27,3 +27,6 @@ bin/
 
 ### Mac OS ###
 .DS_Store
+
+## Ignored files ##
+!**/src/code/ca/bcit/comp2522/lab8bam/Canada.java
