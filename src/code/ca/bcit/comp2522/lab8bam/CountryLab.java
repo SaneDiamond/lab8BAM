@@ -36,8 +36,23 @@ public class CountryLab {
 
         // --------------------------------------------
         // Q3
-        countryNamesStartingWithA(countries, pathMatches);
+        // countryNamesStartingWithA(countries, pathMatches);
 
+        // --------------------------------------------
+        // Q6
+        sortCountries(countries, pathMatches);
+
+    }
+
+    private static void sortCountries(final List<String> countries, final Path pathMatches) {
+        final List<String> sortedCountries;
+        final Stream<String> sortedStream;
+
+        sortedStream = filteredCountryStream(countries)
+                .sorted();
+        sortedCountries = streamToListWithHeader(sortedStream, "Sorted countries:");
+
+        outputResult(sortedCountries, pathMatches);
     }
 
     private static void countryNamesStartingWithA(final List<String> countries, final Path pathMatches) {
@@ -45,17 +60,6 @@ public class CountryLab {
         countriesStartsWithA = countriesThatStartWith(countries, 'A');
 
         outputResult(countriesStartsWithA, pathMatches);
-    }
-
-    private static void outputResult(final List<String> countriesList, final Path pathMatches) {
-        final Path path;
-        path = pathMatches.resolve(DEFAULT_OUTPUT);
-
-        try {
-            Files.write(path, countriesList, StandardOpenOption.CREATE, StandardOpenOption.WRITE);
-        } catch (final IOException e) {
-            e.printStackTrace();
-        }
     }
 
     /* Returns a List with all countries that start with a specific letter. */
@@ -94,6 +98,17 @@ public class CountryLab {
         listWithHeader.addFirst(header);
 
         return listWithHeader;
+    }
+
+    private static void outputResult(final List<String> countriesList, final Path pathMatches) {
+        final Path path;
+        path = pathMatches.resolve(DEFAULT_OUTPUT);
+
+        try {
+            Files.write(path, countriesList, StandardOpenOption.CREATE, StandardOpenOption.WRITE);
+        } catch (final IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /* Returns a stream of the list of countries with no empty or null countries in the list. */
