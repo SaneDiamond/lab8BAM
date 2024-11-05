@@ -5,6 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
@@ -42,7 +43,6 @@ public class CountryLab {
     private static void countryNamesStartingWithA(final List<String> countries, final Path pathMatches) {
         final List<String> countriesStartsWithA;
         countriesStartsWithA = countriesThatStartWith(countries, 'A');
-        countriesStartsWithA.addFirst("Country names starting with 'A':");
 
         outputResult(countriesStartsWithA, pathMatches);
     }
@@ -58,22 +58,16 @@ public class CountryLab {
         }
     }
 
-    /* Returns a stream of the list of countries with no empty or null countries in the list. */
-    private static Stream<String> filteredCountryStream(final List<String> countries) {
-
-        return countries.stream()
-                .filter(Objects::nonNull)
-                .filter(p -> !p.isBlank() && !p.isEmpty());
-
-    }
-
     /* Returns a List with all countries that start with a specific letter. */
     private static List<String> countriesThatStartWith(final List<String> countries,
                                                        final char initial) {
 
-        return filteredCountryStream(countries)
-                .filter(country -> startsWith(country, initial))
-                .toList();
+        final Stream<String> countriesStartingWith;
+
+        countriesStartingWith = filteredCountryStream(countries)
+                .filter(country -> startsWith(country, initial));
+
+        return streamToListWithHeader(countriesStartingWith, "Country names starting with 'A':");
     }
 
     /* Returns true if  */
@@ -86,6 +80,29 @@ public class CountryLab {
         initialChar = Character.toLowerCase(initial);
 
         return firstChar == initialChar;
+    }
+
+    /* Tranforms a stream into a List<String> with the specified header. */
+    private static List<String> streamToListWithHeader(final Stream<String> countryStream,
+                                                       final String header) {
+
+        final List<String> listWithHeader;
+
+        listWithHeader = countryStream.collect(ArrayList::new,
+                List::add,
+                List::addAll);
+        listWithHeader.addFirst(header);
+
+        return listWithHeader;
+    }
+
+    /* Returns a stream of the list of countries with no empty or null countries in the list. */
+    private static Stream<String> filteredCountryStream(final List<String> countries) {
+
+        return countries.stream()
+                .filter(Objects::nonNull)
+                .filter(p -> !p.isBlank() && !p.isEmpty());
+
     }
 
 }
