@@ -17,8 +17,9 @@ public class CountryLab {
         final Path pathMatches;
         final Path pathCountries;
 
-        pathMatches = Paths.get("src", "code", "ca", "bcit", "comp2522", "lab8bam", "matches");
+        pathMatches = Paths.get("matches");
         pathCountries = Paths.get("week8countries.txt");
+
         if (Files.notExists(pathMatches)) {
             Files.createDirectory(pathMatches);
         }
@@ -29,11 +30,25 @@ public class CountryLab {
 
         try {
             final List<String> countries;
+            final List<String> currentList;
+
             countries = Files.readAllLines(pathCountries);
-            countries.forEach(System.out::println);
+            currentList = countriesWithMoreThanOneWord(countries);
+
+            final Path pathData;
+            pathData = pathMatches.resolve("data.txt");
+
+            if (Files.notExists(pathData)) {
+                Files.createFile(pathData);
+            }// creates the file
+
+            Files.write(pathData, currentList, StandardOpenOption.WRITE);
+
+            //            countries.forEach(System.out::println);
         } catch (final IOException e) {
             e.printStackTrace();
         }
+
 
 
     }
@@ -47,9 +62,10 @@ public class CountryLab {
     }
 
     private static Stream<String> countriesShorterThan5Letters(final List<String> countries) {
+        final int SHORT_CHAR_LENGTH = 5;
         return countries.stream()
                 .filter(Objects::nonNull)
-                .filter(p -> p.length() > 5);
+                .filter(p -> p.length() > SHORT_CHAR_LENGTH);
     }
 
     private static Stream<String> countriesContainingUnited(final List<String> countries) {
@@ -85,11 +101,13 @@ public class CountryLab {
      *
      * @param countries a list of country names
      * @return a list of country names with more than 10 letters
-     */    private static List<String> LongCountries(final List<String> countries) {
+     */
+    private static List<String> LongCountries(final List<String> countries) {
         final List<String> countriesLong;
+        final int LONG_COUNTRY_COUNT = 10;
 
         countriesLong = filteredCountryStream(countries)
-                .filter(count -> count.length() >= 10)
+                .filter(count -> count.length() >= LONG_COUNTRY_COUNT)
                 .collect(Collectors.toList());
         return countriesLong;
     }
