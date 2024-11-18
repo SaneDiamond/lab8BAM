@@ -35,8 +35,8 @@ public class CountryLab {
             final List<String> currentList;
 
             countries = Files.readAllLines(pathCountries);
-//            countryNamesStartingWithA(countries, pathMatches);
             uniqueLetters(countries);
+            countryNamesStartingWithA(countries, pathMatches);
 
         } catch (final IOException e) {
             e.printStackTrace();
@@ -50,11 +50,13 @@ public class CountryLab {
      * .txt file in pathMatches with the header:
      * "Country names starting with A:"
      */
-    private static void countryNamesStartingWithA(final List<String> countries, final Path pathMatches) {
-        final List<String> countriesStartsWithA;
-        countriesStartsWithA = countriesThatStartWith(countries, 'A');
+    private static List<String> countryNamesStartingWithA(final List<String> countries, final Path pathMatches) {
+        final Stream<String> countriesStartingWithA;
 
-        outputResult(countriesStartsWithA, pathMatches);
+        countriesStartingWithA = filteredCountryStream(countries)
+                .filter(country -> startsWith(country, 'A'));
+
+        return streamToListWithHeader(countriesStartingWithA, "Country names starting with 'A':");
     }
 
     /*
