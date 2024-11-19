@@ -12,7 +12,16 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+
 public class CountryLab {
+
+    /**
+     * Main method to execute the program.
+     * Reads a list of countries from a file, performs various operations on the list,
+     * and writes results to a file in a directory.
+     *
+     * @throws IOException if there is an error accessing files
+     */
     public static void main(final String[] args) throws IOException {
 
         final Path pathMatches;
@@ -128,7 +137,8 @@ public class CountryLab {
         return streamToListWithHeader(countriesStartingWith, "Country names starting with '" + Character.toUpperCase(initial) + "':");
     }
 
-    /* Returns true if a String str starts with the given initial. */
+    /* Returns true if a String str starts with the given initial.
+    */
     private static boolean startsWith(final String str, final char initial) {
 
         final char firstChar;
@@ -201,7 +211,7 @@ public class CountryLab {
                 .filter(p -> !p.isBlank() && !p.isEmpty());
 
         }
-
+    /* Returns a list of countries' names that are shorter than 5*/
     private static void countriesShorterThan5Letters(final List<String> countries) {
         final List<String> countriesLessThanfive;
 
@@ -213,7 +223,7 @@ public class CountryLab {
         outputResult(countriesLessThanfive, Paths.get("matches"));
 
     }
-
+    /* Returns a list of countries containing the word "United" */
     private static void countriesContainingUnited(final List<String> countries) {
         final List<String> countriesUnited;
 
@@ -224,7 +234,7 @@ public class CountryLab {
         outputResult(countriesUnited, Paths.get("matches"));
 
     }
-
+    /* Returns a list of unique chars of the first letters of each country*/
     private static void uniqueLetters(final List<String> countries) {
         final StringBuilder filteredCountries;
 
@@ -238,7 +248,7 @@ public class CountryLab {
         outputResult(filteredCountries.toString(), Paths.get("matches"));
 
     }
-
+    /* Returns a stream of the shortest country name */
     private static Stream<String> shortestCountryName(final List<String> countries) {
         return countries.stream()
                 .filter(Objects::nonNull)
@@ -246,7 +256,7 @@ public class CountryLab {
                 .min(Comparator.comparingInt(String::length))
                 .stream();
     }
-
+    /* Returns a stream of country count */
     private static Stream<String> countryNamesToCount(final List<String> countries) {
         return countries.stream()
                 .filter(Objects::nonNull)
@@ -334,7 +344,7 @@ public class CountryLab {
                 .filter(c -> c.trim().contains(" "))
                 .collect(Collectors.toList());
 
-        outputResult(countries, Paths.get("matches"));
+        outputResult(multiWordCountries, Paths.get("matches"));
     }
 
 }
